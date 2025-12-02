@@ -1,0 +1,7 @@
+{
+    "zadania": ["zrobić", "task", "zadanie"],
+    "egzamin": ["egzamin", "kolokwium", "test"],
+    "lekarz": ["lekarz", "wizyta", "recepta"],
+    "zakupy": ["kupić", "zakupy", "lista"],
+    "inne": []
+}

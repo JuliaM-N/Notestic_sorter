@@ -13,18 +13,20 @@ def load_categories():
     if os.path.exists("categories.json"):
         try:
             with open("categories.json", "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
         except Exception as e:
             print("Błąd w categories.json:", e)
 
-    # fallback — kategorie domyślne
+    # fallback — domyślne kategorie
     return {
         "zadania": ["zrobić", "task", "zadanie"],
-        "egzamin": ["egzamin", "kolokwium", "test"],
-        "lekarz": ["lekarz", "wizyta", "recepta"],
-        "zakupy": ["kupić", "zakupy", "lista"],
+        "egzamin": ["egzamin", "kolokwium", "test", "egsam"],
+        "lekarz": ["lekarz", "wizyta", "recepta", "appoitment"],
+        "zakupy": ["kupić", "zakupy", "lista", "buy"],
         "inne": []
-    }
+    }   
 
 # Wczytujemy kategorie do zmiennej
 CATEGORIES = load_categories()
@@ -111,50 +113,48 @@ class NoteApp:
         text = self.entry.get()
         if not text.strip():
             return
-        
-        category = detect_category(text)  # automatyczne przypisanie kategorii
+
+        category = detect_category(text)
         self.notes.append({"text": text, "cat": category, "done": False})
         save_notes(self.notes)
         self.entry.delete(0, tk.END)
         self.render_notes()
-
-        var = tk.BooleanVar()
-
-        row = tk.Frame(self.notes_frame)
-        chk = tk.Checkbutton(row, variable=var)
-        lbl = tk.Label(row, text=f"[{category}] {text}")
-
-        chk.pack(side="left")
-        lbl.pack(side="left", padx=5)
-        row.pack(anchor="w")
-
-        self.notes.append({"text": text, "cat": category, "done": var})
         
     def render_notes(self):
-        # Czyścimy frame notatek
+    # Czyścimy frame
         for widget in self.notes_frame.winfo_children():
             widget.destroy()
 
-        # Filtrujemy po kategorii
+    # Filtrujemy po kategorii
         if self.current_category:
             filtered_notes = [n for n in self.notes if n["cat"] == self.current_category]
         else:
             filtered_notes = self.notes
 
-        # Wyświetlamy notatki
-        for i, note in enumerate(filtered_notes):
+    # Wyświetlamy notatki
+        for note in filtered_notes:
             var = tk.BooleanVar(value=note["done"])
 
+        # Funkcje lokalne, mogą używać self
             def toggle_done(n=note, v=var):
                 n["done"] = v.get()
                 save_notes(self.notes)
 
-            row = tk.Frame(self.notes_frame)
-            chk = tk.Checkbutton(row, variable=var, command=toggle_done)
-            lbl = tk.Label(row, text=note["text"])
-            chk.pack(side="left")
-            lbl.pack(side="left", padx=5)
-            row.pack(anchor="w", pady=2)
+            def delete_note(n=note):
+                self.notes.remove(n)
+                save_notes(self.notes)
+                self.render_notes()  # odświeżenie widoku po usunięciu
+
+        row = tk.Frame(self.notes_frame)
+        chk = tk.Checkbutton(row, variable=var, command=toggle_done)
+        lbl = tk.Label(row, text=note["text"])
+        btn_del = tk.Button(row, text="Usuń", command=delete_note)
+
+        chk.pack(side="left")
+        lbl.pack(side="left", padx=5)
+        btn_del.pack(side="left", padx=5)
+        row.pack(anchor="w", pady=2)
+         
 
 
 root = tk.Tk()

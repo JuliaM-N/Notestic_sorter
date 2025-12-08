@@ -1,7 +1,7 @@
 import json
 import os
 
-CATEGORIES_FILE = "categories.json"
+CATEGORIES_FILE = "categories.json" #add categories
 NOTES_FILE = "notes.json"
 
 def load_categories():
@@ -14,7 +14,7 @@ def load_categories():
         except Exception as e:
             print("Błąd w categories.json:", e)
 
-    # fallback — domyślne kategorie
+    # fallback 
     return {
         "zadania": ["zrobić", "task", "zadanie"],
         "egzamin": ["egzamin", "kolokwium", "test", "egsam"],

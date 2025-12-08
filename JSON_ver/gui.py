@@ -6,7 +6,7 @@ class NoteApp:
         self.root = root
         self.root.title("Notestick Sorter")
 
-        # Dane
+        # Data
         self.categories = load_categories()
         self.notes = load_notes()
         self.current_category = None

@@ -1,0 +1,8 @@
+{
+    "zadania": ["zrobić", "task", "zadanie"],
+    "egzamin": ["egzamin", "kolokwium", "test", "egsam"],
+    "lekarz": ["lekarz", "wizyta", "recepta", "doctor"],
+    "zakupy": ["kupić", "zakupy", "lista", "buy"],
+    "spotkania": ["wizyta", "umówienie", "randka", "appoitment"],
+    "inne": []
+}
